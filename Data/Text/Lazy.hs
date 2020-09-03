@@ -191,6 +191,7 @@ module Data.Text.Lazy
     -- * Searching
     , filter
     , find
+    , elem
     , breakOnAll
     , partition
 
@@ -220,6 +221,7 @@ import Data.Char (isSpace)
 import Data.Data (Data(gfoldl, toConstr, gunfold, dataTypeOf), constrIndex,
                   Constr, mkConstr, DataType, mkDataType, Fixity(Prefix))
 import Data.Binary (Binary(get, put))
+import Data.Maybe (isJust)
 import Data.Monoid (Monoid(..))
 #if MIN_VERSION_base(4,9,0)
 import Data.Semigroup (Semigroup(..))
@@ -1683,6 +1685,13 @@ filter p t = unstream (S.filter p (stream t))
 find :: (Char -> Bool) -> Text -> Maybe Char
 find p t = S.findBy p (stream t)
 {-# INLINE find #-}
+
+-- | /O(n)/ The 'elem' function takes a character and a 'Text', and
+-- returns 'True' if the element is found in the given 'Text', or
+-- 'False' otherwise.
+elem :: Char -> Text -> Bool
+elem c t = isJust (find (== c) t)
+{-# INLINE elem #-}
 
 -- | /O(n)/ The 'partition' function takes a predicate and a 'Text',
 -- and returns the pair of 'Text's with elements which do and do not

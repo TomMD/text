@@ -185,6 +185,7 @@ module Data.Text
     , filter
     , breakOnAll
     , find
+    , elem
     , partition
 
     -- , findSubstring
@@ -224,6 +225,7 @@ import Control.Monad.ST (ST)
 import qualified Data.Text.Array as A
 import qualified Data.List as L
 import Data.Binary (Binary(get, put))
+import Data.Maybe (isJust)
 import Data.Monoid (Monoid(..))
 #if MIN_VERSION_base(4,9,0)
 import Data.Semigroup (Semigroup(..))
@@ -1487,6 +1489,13 @@ chunksOf k = go
 
 -------------------------------------------------------------------------------
 -- ** Searching with a predicate
+
+-- | /O(n)/ The 'elem' function takes a character and a 'Text', and
+-- returns 'True' if the element is found in the given 'Text', or
+-- 'False' otherwise.
+elem :: Char -> Text -> Bool
+elem c t = isJust (find (== c) t)
+{-# INLINE elem #-}
 
 -- | /O(n)/ The 'find' function takes a predicate and a 'Text', and
 -- returns the first element matching the predicate, or 'Nothing' if
